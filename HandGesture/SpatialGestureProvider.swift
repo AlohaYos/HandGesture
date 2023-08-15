@@ -12,11 +12,14 @@ import Vision
 
 class SpatialGestureProvider: NSObject {
 
-	let devicePosition: AVCaptureDevice.Position = .front	// .front / .back
 	var baseView: UIView? = nil
 	var cameraView: CameraView!
+#if os(visionOS)
+#else
+	let devicePosition: AVCaptureDevice.Position = .front	// .front / .back
 	private let videoDataOutputQueue = DispatchQueue(label: "CameraFeedDataOutput", qos: .userInteractive)
 	private var cameraFeedSession: AVCaptureSession?
+#endif
 	private let drawLayer = DrawLayer()
 	private var handPoseRequest = VNDetectHumanHandPoseRequest()
 	private var gestureProcessors = [SpatialGestureProcessor]()
@@ -24,6 +27,8 @@ class SpatialGestureProvider: NSObject {
 	init(baseView: UIView? = nil) {
 		super.init()
 
+	#if os(visionOS)
+	#else
 		handPoseRequest.maximumHandCount = 2	// both hands
 
 		self.baseView = baseView
@@ -44,11 +49,14 @@ class SpatialGestureProvider: NSObject {
 		} catch {
 			NSLog("camera session could not run")
 		}
-
+	#endif
 	}
 	
 	func terminate() {
+	#if os(visionOS)
+	#else
 		cameraFeedSession?.stopRunning()
+	#endif
 	}
 	
 	func appendGesture(_ gesture: SpatialGestureProcessor) {
@@ -66,6 +74,8 @@ class SpatialGestureProvider: NSObject {
 	}
 	
 	func setupAVSession() throws {
+	#if os(visionOS)
+	#else
 		guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: devicePosition) else {
 			throw AppError.captureSessionSetup(reason: "Could not find a front facing camera.")
 		}
@@ -93,12 +103,14 @@ class SpatialGestureProvider: NSObject {
 		}
 		session.commitConfiguration()
 		cameraFeedSession = session
+	#endif
 	}
 
 }
 
 // MARK: AVCaptureVideoDataOutputSampleBufferDelegate
-
+#if os(visionOS)
+#else
 extension SpatialGestureProvider: AVCaptureVideoDataOutputSampleBufferDelegate {
 	public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
 		
@@ -131,3 +143,4 @@ extension SpatialGestureProvider: AVCaptureVideoDataOutputSampleBufferDelegate {
 		}
 	}
 }
+#endif

@@ -17,6 +17,9 @@
 		C4EB82F7248AEB7B00CD7D41 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4EB82F5248AEB7B00CD7D41 /* LaunchScreen.storyboard */; };
 		FF0192582A5F859E0062358D /* DrawLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0192572A5F859E0062358D /* DrawLayer.swift */; };
 		FF01925A2A5F9F7A0062358D /* SpatialGestureProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0192592A5F9E090062358D /* SpatialGestureProcessor.swift */; };
+		FF2AF56F2A8B61A000979E81 /* VisionGestureProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2AF56E2A8B61A000979E81 /* VisionGestureProvider.swift */; };
+		FF2AF5712A8B61EE00979E81 /* VisionGestureProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2AF5702A8B61EE00979E81 /* VisionGestureProcessor.swift */; };
+		FF2AF5732A8B845100979E81 /* VisionGesture_Cursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2AF5722A8B845100979E81 /* VisionGesture_Cursor.swift */; };
 		FF4F99692A7738F200ACAAE6 /* Gesture_Aloha.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F99682A7738F200ACAAE6 /* Gesture_Aloha.swift */; };
 		FF4F996B2A7767DF00ACAAE6 /* Gesture_Draw.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F996A2A7767DF00ACAAE6 /* Gesture_Draw.swift */; };
 		FF59AF552A612885003ADC97 /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF59AF532A612749003ADC97 /* CGPoint.swift */; };
@@ -40,6 +43,9 @@
 		C4EB82F8248AEB7B00CD7D41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FF0192572A5F859E0062358D /* DrawLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawLayer.swift; sourceTree = "<group>"; };
 		FF0192592A5F9E090062358D /* SpatialGestureProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialGestureProcessor.swift; sourceTree = "<group>"; };
+		FF2AF56E2A8B61A000979E81 /* VisionGestureProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisionGestureProvider.swift; sourceTree = "<group>"; };
+		FF2AF5702A8B61EE00979E81 /* VisionGestureProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisionGestureProcessor.swift; sourceTree = "<group>"; };
+		FF2AF5722A8B845100979E81 /* VisionGesture_Cursor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisionGesture_Cursor.swift; sourceTree = "<group>"; };
 		FF3847242A738FBF006F9D5B /* HandGesture.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HandGesture.entitlements; sourceTree = "<group>"; };
 		FF4F99682A7738F200ACAAE6 /* Gesture_Aloha.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gesture_Aloha.swift; sourceTree = "<group>"; };
 		FF4F996A2A7767DF00ACAAE6 /* Gesture_Draw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gesture_Draw.swift; sourceTree = "<group>"; };
@@ -96,6 +102,9 @@
 				C475655C248AEBD900F111B8 /* CameraViewController.swift */,
 				FFF349FA2A76744300A31C83 /* SpatialGestureProvider.swift */,
 				FF0192592A5F9E090062358D /* SpatialGestureProcessor.swift */,
+				FF2AF56E2A8B61A000979E81 /* VisionGestureProvider.swift */,
+				FF2AF5702A8B61EE00979E81 /* VisionGestureProcessor.swift */,
+				FF2AF5722A8B845100979E81 /* VisionGesture_Cursor.swift */,
 				FF7563B32A63CF5E006A8206 /* Gesture_Heart.swift */,
 				FF4F99682A7738F200ACAAE6 /* Gesture_Aloha.swift */,
 				FF78C4A32A7792AA003B215A /* Gesture_Cursor.swift */,
@@ -198,13 +207,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF2AF56F2A8B61A000979E81 /* VisionGestureProvider.swift in Sources */,
 				42BF98802A67B651003DA7E1 /* Gesture_Gun.swift in Sources */,
 				FFF349FB2A76744300A31C83 /* SpatialGestureProvider.swift in Sources */,
 				FF7563B42A63D61E006A8206 /* Gesture_Heart.swift in Sources */,
 				FF01925A2A5F9F7A0062358D /* SpatialGestureProcessor.swift in Sources */,
 				C4EB82EB248AEB7B00CD7D41 /* AppDelegate.swift in Sources */,
 				FF0192582A5F859E0062358D /* DrawLayer.swift in Sources */,
+				FF2AF5712A8B61EE00979E81 /* VisionGestureProcessor.swift in Sources */,
 				C4EB82ED248AEB7B00CD7D41 /* SceneDelegate.swift in Sources */,
+				FF2AF5732A8B845100979E81 /* VisionGesture_Cursor.swift in Sources */,
 				FF59AF552A612885003ADC97 /* CGPoint.swift in Sources */,
 				FF78C4A42A7792AA003B215A /* Gesture_Cursor.swift in Sources */,
 				C475655D248AEBD900F111B8 /* CameraView.swift in Sources */,
@@ -371,9 +383,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.newtonjapan.apple-samplecode.HandPose";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,7";
 			};
 			name = Debug;
 		};
@@ -394,9 +407,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.newtonjapan.apple-samplecode.HandPose";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,7";
 			};
 			name = Release;
 		};

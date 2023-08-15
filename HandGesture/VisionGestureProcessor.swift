@@ -4,32 +4,40 @@
 //
 //  Created by Yos Hashimoto on 2023/07/30.
 //
-
+import Foundation
 import CoreGraphics
 import UIKit
 import Vision
+#if targetEnvironment(simulator)
+import ARKit
+#else
+@preconcurrency import ARKit
+#endif
 
-// MARK: SpatialGestureDelegate (gesture callback)
 
-protocol SpatialGestureDelegate {
-	func gestureBegan(gesture: SpatialGestureProcessor, atPoints:[CGPoint]);
-	func gestureMoved(gesture: SpatialGestureProcessor, atPoints:[CGPoint]);
-	func gestureFired(gesture: SpatialGestureProcessor, atPoints:[CGPoint], triggerType: Int);
-	func gestureEnded(gesture: SpatialGestureProcessor, atPoints:[CGPoint]);
-	func gestureCanceled(gesture: SpatialGestureProcessor, atPoints:[CGPoint]);
+// MARK: VisionGestureDelegate (gesture callback)
+
+protocol VisionGestureDelegate {
+	func gestureBegan(gesture: VisionGestureProcessor, atPoints:[CGPoint]);
+	func gestureMoved(gesture: VisionGestureProcessor, atPoints:[CGPoint]);
+	func gestureFired(gesture: VisionGestureProcessor, atPoints:[CGPoint], triggerType: Int);
+	func gestureEnded(gesture: VisionGestureProcessor, atPoints:[CGPoint]);
+	func gestureCanceled(gesture: VisionGestureProcessor, atPoints:[CGPoint]);
 }
 
-extension SpatialGestureDelegate {
-	func gestureBegan(gesture: SpatialGestureProcessor, atPoints:[CGPoint]) {}
-	func gestureMoved(gesture: SpatialGestureProcessor, atPoints:[CGPoint]) {}
-	func gestureFired(gesture: SpatialGestureProcessor, atPoints:[CGPoint], triggerType: Int) {}
-	func gestureEnded(gesture: SpatialGestureProcessor, atPoints:[CGPoint]) {}
-	func gestureCanceled(gesture: SpatialGestureProcessor, atPoints:[CGPoint]) {}
+extension VisionGestureDelegate {
+	func gestureBegan(gesture: VisionGestureProcessor, atPoints:[CGPoint]) {}
+	func gestureMoved(gesture: VisionGestureProcessor, atPoints:[CGPoint]) {}
+	func gestureFired(gesture: VisionGestureProcessor, atPoints:[CGPoint], triggerType: Int) {}
+	func gestureEnded(gesture: VisionGestureProcessor, atPoints:[CGPoint]) {}
+	func gestureCanceled(gesture: VisionGestureProcessor, atPoints:[CGPoint]) {}
 }
 
-// MARK: SpatialGestureProcessor (Base class of any Gesture)
+// MARK: VisionGestureProcessor (Base class of any Gesture)
 
-class SpatialGestureProcessor {
+class VisionGestureProcessor {
+
+	typealias Scalar = Double
 
 // MARK: enum
 
@@ -68,7 +76,7 @@ class SpatialGestureProcessor {
 
 // MARK: propaties
 
-	var delegate: SpatialGestureDelegate?
+	var delegate: VisionGestureDelegate?
 	var cameraView: CameraView!
 	var drawLayer: DrawLayer?
 	var didChangeStateClosure:((State)->Void)?
@@ -79,11 +87,11 @@ class SpatialGestureProcessor {
 	}
 	var defaultHand = WhichHand.right
 
-	var handJoints: [[[VNRecognizedPoint?]]] = []			// array of fingers of both hand (0:right hand, 1:left hand)
-	var lastHandJoints: [[[VNRecognizedPoint?]]] = []		// remember first pose
+	var handJoints: [[[SIMD3<Scalar>?]]] = []			// array of fingers of both hand (0:right hand, 1:left hand)
+	var lastHandJoints: [[[SIMD3<Scalar>?]]] = []		// remember first pose
 
-	private var fingerJoints: [[VNRecognizedPoint?]] = []			// array of finger joint position (VisionKit coordinates) --> FINGER_JOINTS
-	private var fingerJointsCnv = [[CGPoint?]]()					// array of finger joint position (UIKit coordinates)
+	private var fingerJoints: [[SIMD3<Scalar>?]] = []			// array of finger joint position (VisionKit coordinates) --> FINGER_JOINTS
+//	private var fingerJointsCnv = [[CGPoint?]]()					// array of finger joint position (UIKit coordinates)
 	
 	init() {
 		self.didChangeStateClosure = { [weak self] state in
@@ -94,7 +102,7 @@ class SpatialGestureProcessor {
 
 	convenience init(delegate: UIViewController) {
 		self.init()
-		self.delegate = delegate as! any SpatialGestureDelegate
+		self.delegate = delegate as! any VisionGestureDelegate
 	}
 	
 	private func handleGestureStateChange(_ state: State) {
@@ -214,20 +222,20 @@ class SpatialGestureProcessor {
 	}
 	
 	// MARK: Observation processing
-	func processHandPoseObservations(observations: [VNHumanHandPoseObservation]) {
+	func processHandPoseObservations(observations: [HandAnchor?]) {
 
-		var fingerJoints1 = [[VNRecognizedPoint?]]()
-		var fingerJoints2 = [[VNRecognizedPoint?]]()
+		var fingerJoints1 = [[SIMD3<Scalar>?]]()
+		var fingerJoints2 = [[SIMD3<Scalar>?]]()
 		var fingerPath = CGMutablePath()
 		
 		do {
 			if observations.count>0 {
-				fingerJoints1 = try getFingerJoints(with: observations[0])
-				fingerPath.addPath(drawFingers(fingerJoints: fingerJoints1))
+				fingerJoints1 = try getFingerJoints(with: observations[0]!)
+				//fingerPath.addPath(drawFingers(fingerJoints: fingerJoints1))
 			}
 			if observations.count>1 {
-				fingerJoints2 = try getFingerJoints(with: observations[1])
-				fingerPath.addPath(drawFingers(fingerJoints: fingerJoints2))
+				fingerJoints2 = try getFingerJoints(with: observations[1]!)
+				//fingerPath.addPath(drawFingers(fingerJoints: fingerJoints2))
 			}
 
 			// decide which hand is right/left
@@ -282,8 +290,10 @@ class SpatialGestureProcessor {
 	}
 	
 	// get finger joint position array (VisionKit coordinate)
-	func getFingerJoints(with observation: VNHumanHandPoseObservation) throws -> [[VNRecognizedPoint?]] {
+	func getFingerJoints(with observation: HandAnchor) throws -> [[SIMD3<Scalar>?]] {
 		do {
+			
+			/*
 			let fingers = try observation.recognizedPoints(.all)
 			// get all finger joint point in VisionKit coordinate (VNRecognizedPoint)
 			fingerJoints = [	// (FINGER_JOINTS)
@@ -294,6 +304,7 @@ class SpatialGestureProcessor {
 				[fingers[.littleTip],fingers[.littleDIP],fingers[.littlePIP],fingers[.littleMCP]],
 				[fingers[.wrist]]	// <-- wrist joint here
 			]
+			*/
 		} catch {
 			NSLog("Error")
 		}
@@ -301,7 +312,7 @@ class SpatialGestureProcessor {
 	}
 
 	// get joint position (UIKit coordinates)
-	func jointPosition(hand: [[VNRecognizedPoint?]], finger: Int, joint: Int) -> CGPoint? {
+	func jointPosition(hand: [[SIMD3<Scalar>?]], finger: Int, joint: Int) -> CGPoint? {
 		if finger==WhichFinger.wrist.rawValue {
 			return cnv(hand[finger][wristJointIndex])
 		}
@@ -339,7 +350,7 @@ class SpatialGestureProcessor {
 	}
 
 	// conver coordinate : VisionKit --> AVFoundation (video) --> UIKit
-	func cnv(_ point: VNRecognizedPoint?) -> CGPoint? {
+	func cnv(_ point: SIMD3<Scalar>?) -> CGPoint? {
 		#if os(visionOS)
 		return nil
 		#else
@@ -355,7 +366,7 @@ class SpatialGestureProcessor {
 	}
 
 	// draw finger bones
-	func drawFingers(fingerJoints: [[VNRecognizedPoint?]]) -> CGMutablePath {
+	func drawFingers(fingerJoints: [[SIMD3<Scalar>?]]) -> CGMutablePath {
 		let path = CGMutablePath()
 		for fingerjoint in fingerJoints {
 			var i = 0
@@ -383,4 +394,10 @@ class SpatialGestureProcessor {
 		return CGPath(roundedRect: CGRect(x: point.x - 5, y: point.y - 5, width: 10, height: 10), cornerWidth: 5, cornerHeight: 5, transform: nil)
 	}
 
+}
+
+extension SIMD4 {
+	var _xyz: SIMD3<Scalar> {
+		self[SIMD3(0, 1, 2)]
+	}
 }

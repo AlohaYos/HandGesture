@@ -12,22 +12,32 @@ import Vision
 // MARK: CameraViewController
 
 class CameraViewController: UIViewController {
-
+	
+	@IBOutlet weak var textView: UITextView!
+	
+#if os(visionOS)
+	private var gestureProvider: VisionGestureProvider?
+#else
 	private var gestureProvider: SpatialGestureProvider?
-		
+#endif
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		textView.text = "Ready..."
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-
+		#if os(visionOS)
+		gestureProvider = VisionGestureProvider(baseView: self.view)
+		//gestureProvider?.appendGesture(Gesture_Cursor(delegate: self))
+		#else
 		gestureProvider = SpatialGestureProvider(baseView: self.view)
 		gestureProvider?.appendGesture(Gesture_Cursor(delegate: self))
 //		gestureProvider?.appendGesture(Gesture_Draw(delegate: self))
 //		gestureProvider?.appendGesture(Gesture_Heart(delegate: self))
 //		gestureProvider?.appendGesture(Gesture_Aloha(delegate: self))
 //		gestureProvider?.appendGesture(Gesture_Gun(delegate: self))
+		#endif
 	}
 	
 	override func viewDidLayoutSubviews() {
@@ -43,6 +53,39 @@ class CameraViewController: UIViewController {
 
 // MARK: SpecialGestureDelegate
 
+#if os(visionOS)
+extension CameraViewController: VisionGestureDelegate {
+	func gestureBegan(gesture: VisionGestureProcessor, atPoints:[CGPoint]) {
+		textView.text = textView.text+"\r"+"Gesture[\(String(describing: type(of: gesture)))] began"
+	}
+	func gestureMoved(gesture: VisionGestureProcessor, atPoints:[CGPoint]) {
+	}
+	func gestureFired(gesture: VisionGestureProcessor, atPoints:[CGPoint], triggerType: Int) {
+		if gesture is Gesture_Cursor {
+			var cursor: Gesture_Cursor.CursorType = Gesture_Cursor.CursorType(rawValue: triggerType)!
+			switch cursor {
+			case .up:
+				print("UP")
+			case .down:
+				print("DOWN")
+			case .right:
+				print("RIGHT")
+			case .left:
+				print("LEFT")
+			case .fire:
+				print("FIRE")
+			default:
+				break
+			}
+		}
+	}
+	func gestureEnded(gesture: VisionGestureProcessor, atPoints:[CGPoint]) {
+	}
+	func gestureCanceled(gesture: VisionGestureProcessor, atPoints:[CGPoint]) {
+	}
+	
+}
+#else
 extension CameraViewController: SpatialGestureDelegate {
 	func gestureBegan(gesture: SpatialGestureProcessor, atPoints:[CGPoint]) {
 		print("Gesture[\(String(describing: type(of: gesture)))] began")
@@ -99,3 +142,4 @@ extension CameraViewController: SpatialGestureDelegate {
 	}
 	
 }
+#endif

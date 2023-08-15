@@ -14,6 +14,15 @@ class CameraView: UIView {
 	var drawLayer = DrawLayer()		// draw path
 	
 	// MARK: initialize camera layer
+#if os(visionOS)
+	var previewLayer: CALayer?
+	override init(frame: CGRect) {
+		super.init(frame: frame)
+	}
+	required init?(coder: NSCoder) {
+		super.init(coder: coder)
+	}
+#else
 	var previewLayer: AVCaptureVideoPreviewLayer {
 		return layer as! AVCaptureVideoPreviewLayer
 	}
@@ -46,11 +55,13 @@ class CameraView: UIView {
 		previewLayer.addSublayer(overlayLayer)
 		overlayLayer.cameraView = self
 	}
-		
+#endif
 }
 
 // MARK: draw finger point and path
 
+#if os(visionOS)
+#else
 extension CameraView {
 	struct Holder {
 		static var drawPath = UIBezierPath()
@@ -116,3 +127,4 @@ extension CameraView {
 	}
 
 }
+#endif
