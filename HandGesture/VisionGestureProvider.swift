@@ -43,6 +43,8 @@ class VisionGestureProvider: NSObject {
 	
 	func start() async {
 		do {
+			// Hand-tracking data isn’t available when your app is only displaying a window or volume.
+			// Instead, it’s available when you present an immersive space
 			if HandTrackingProvider.isSupported {
 				print("ARKitSession starting.")
 				try await session.run([handTracking])

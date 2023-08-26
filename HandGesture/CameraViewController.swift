@@ -22,7 +22,8 @@ class CameraViewController: UIViewController {
 #endif
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		textView.text = "Ready..."
+		textView.text = ""
+		textLog("Ready...")
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -30,6 +31,11 @@ class CameraViewController: UIViewController {
 		#if os(visionOS)
 		gestureProvider = VisionGestureProvider(baseView: self.view)
 		//gestureProvider?.appendGesture(Gesture_Cursor(delegate: self))
+
+		Task {
+			await prepareGesture()
+		}
+
 		#else
 		gestureProvider = SpatialGestureProvider(baseView: self.view)
 		gestureProvider?.appendGesture(Gesture_Cursor(delegate: self))
@@ -49,6 +55,13 @@ class CameraViewController: UIViewController {
 		super.viewWillDisappear(animated)
 	}
 		
+#if os(visionOS)
+	func prepareGesture() async {
+		await gestureProvider?.start()
+		await gestureProvider?.publishHandTrackingUpdates()
+		await gestureProvider?.monitorSessionEvents()
+	}
+#endif
 }
 
 // MARK: SpecialGestureDelegate
@@ -56,24 +69,25 @@ class CameraViewController: UIViewController {
 #if os(visionOS)
 extension CameraViewController: VisionGestureDelegate {
 	func gestureBegan(gesture: VisionGestureProcessor, atPoints:[CGPoint]) {
-		textView.text = textView.text+"\r"+"Gesture[\(String(describing: type(of: gesture)))] began"
+		textLog("Gesture[\(String(describing: type(of: gesture)))] began")
+//		textView.text = textView.text+"\r"+"Gesture[\(String(describing: type(of: gesture)))] began"
 	}
 	func gestureMoved(gesture: VisionGestureProcessor, atPoints:[CGPoint]) {
 	}
 	func gestureFired(gesture: VisionGestureProcessor, atPoints:[CGPoint], triggerType: Int) {
-		if gesture is Gesture_Cursor {
-			var cursor: Gesture_Cursor.CursorType = Gesture_Cursor.CursorType(rawValue: triggerType)!
+		if gesture is VisionGesture_Cursor {
+			let cursor: Gesture_Cursor.CursorType = Gesture_Cursor.CursorType(rawValue: triggerType)!
 			switch cursor {
 			case .up:
-				print("UP")
+				textLog("UP")
 			case .down:
-				print("DOWN")
+				textLog("DOWN")
 			case .right:
-				print("RIGHT")
+				textLog("RIGHT")
 			case .left:
-				print("LEFT")
+				textLog("LEFT")
 			case .fire:
-				print("FIRE")
+				textLog("FIRE")
 			default:
 				break
 			}
@@ -84,6 +98,11 @@ extension CameraViewController: VisionGestureDelegate {
 	func gestureCanceled(gesture: VisionGestureProcessor, atPoints:[CGPoint]) {
 	}
 	
+	func textLog(_ message: String) {
+		textView.isScrollEnabled = false
+		textView.text = message+"\r"+textView.text
+	}
+
 }
 #else
 extension CameraViewController: SpatialGestureDelegate {
