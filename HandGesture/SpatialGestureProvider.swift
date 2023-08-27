@@ -116,7 +116,7 @@ extension SpatialGestureProvider: AVCaptureVideoDataOutputSampleBufferDelegate {
 					htf.writeFile(atPath: "handtrack.json", contents: jsonStr)
 					// jsonファイルを介して VisionKitの座標値を渡す
 					var readStr = htf.readFile(atPath: "handtrack.json")
-					var dt3D = HandTrackJson3D(jsonStr: readStr)	// 2D-->3D変換された座標値
+					var dt3D: HandTrackJson3D? = HandTrackJson3D(jsonStr: readStr)	// 2D-->3D変換された座標値
 				}
 				
 				for processor in gestureProcessors {
