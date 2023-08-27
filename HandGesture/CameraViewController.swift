@@ -23,10 +23,10 @@ class CameraViewController: UIViewController {
 		super.viewDidAppear(animated)
 
 		gestureProvider = SpatialGestureProvider(baseView: self.view)
-		gestureProvider?.appendGesture(Gesture_Cursor(delegate: self))
+//		gestureProvider?.appendGesture(Gesture_Cursor(delegate: self))
 //		gestureProvider?.appendGesture(Gesture_Draw(delegate: self))
 //		gestureProvider?.appendGesture(Gesture_Heart(delegate: self))
-//		gestureProvider?.appendGesture(Gesture_Aloha(delegate: self))
+		gestureProvider?.appendGesture(Gesture_Aloha(delegate: self))
 //		gestureProvider?.appendGesture(Gesture_Gun(delegate: self))
 	}
 	

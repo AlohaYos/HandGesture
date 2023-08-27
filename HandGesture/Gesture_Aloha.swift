@@ -27,7 +27,17 @@ class Gesture_Aloha: SpatialGestureProcessor {
             if(isShakaPose()) {		// wait for first pose (thumb and little finger outstretched, other fingers bending)
 				delegate?.gestureBegan(gesture: self, atPoints: [CGPointZero])
                 state = State.waitForRelease
-            }
+				
+				/*
+				// Hand Tracking Fake
+				let htf = HandTrackFake()
+				var jsonStr = HandTrackJson2D(handTrackData: handJoints).jsonStr
+				htf.writeFile(atPath: "handtrack.json", contents: jsonStr)
+				//print("### Json str written\n\(jsonStr)")
+				var readStr = htf.readFile(atPath: "handtrack.json")
+				//print("### Json str read\n\(readStr)")
+				*/
+			}
             break
         case .waitForRelease:	// wait for pose release
 			delegate?.gestureMoved(gesture: self, atPoints: shakaTips())
