@@ -13,8 +13,13 @@ struct HandTrackFake {
 	private var fakeRootDirectory = ""
 
 	init() {
-		// /Users/yoshiyuki/Library/Containers/com.newtonjapan.apple-samplecode.HandPose/Data/HandTrackFake/handtrack.json
+		print("### NSHomeDirectory=[\(NSHomeDirectory())]")
+		// /Users/yoshiyuki/Library/Containers/com.newtonjapan.apple-samplecode.HandPose/Data/HandTrackFake
 		fakeRootDirectory = NSHomeDirectory() + "/HandTrackFake"
+
+		// Target -> Capabilities -> App Sandbox -> File access -> Downloads folder を Read/Writeに設定すること
+		fakeRootDirectory = "/Users/yoshiyuki/Downloads/HandTrackFake"
+
 		createDirectory(atPath: fakeRootDirectory)
 	}
 	
