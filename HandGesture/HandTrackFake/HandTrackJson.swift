@@ -10,8 +10,6 @@ import CoreGraphics
 import UIKit
 import Vision
 
-typealias Scalar = Float
-
 // MARK: VNRecognizedPointFake
 
 struct VNRecognizedPointFake: Codable {
@@ -157,6 +155,8 @@ struct HandTrackJson2D: Codable {
 
 struct HandTrackJson3D: Codable {
 	
+	typealias Scalar = Float
+
 	var handJoints: [[[SIMD3<Scalar>?]]] = []			// array of fingers of both hand (0:right hand, 1:left hand)
 	
 	// IN : 3D data

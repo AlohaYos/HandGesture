@@ -8,12 +8,17 @@
 
 import Foundation
 
+let enableHandTrackFake = true
+let appGroupName = "group.com.newtonjapan.handtrackfake"
+
 struct HandTrackFake {
 	private let fileManager = FileManager.default
 	private var fakeRootDirectory = ""
 
+	let handTrackDataKey  = "HandTrackData"
+
 	init() {
-		print("### NSHomeDirectory=[\(NSHomeDirectory())]")
+		// print("### NSHomeDirectory=[\(NSHomeDirectory())]")
 		// /Users/yoshiyuki/Library/Containers/com.newtonjapan.apple-samplecode.HandPose/Data/HandTrackFake
 		fakeRootDirectory = NSHomeDirectory() + "/HandTrackFake"
 
@@ -21,6 +26,9 @@ struct HandTrackFake {
 		fakeRootDirectory = "/Users/yoshiyuki/Downloads/HandTrackFake"
 
 		createDirectory(atPath: fakeRootDirectory)
+		
+		let userDefaults = UserDefaults(suiteName: appGroupName)
+		userDefaults?.register(defaults: ["JsonStore" : ""])
 	}
 	
 	// MARK: file management
@@ -58,6 +66,9 @@ struct HandTrackFake {
 	}
 	
 	func writeFile(atPath path: String, contents: String) {
+		setGroupData(key: "JsonData", jsonStr: contents)
+		return
+		
 		do {
 			let path = convertPath(path)
 			let url: URL = URL(fileURLWithPath: path)
@@ -67,6 +78,9 @@ struct HandTrackFake {
 	}
 
 	func readFile(atPath path: String) -> String {
+		guard let ret = groupData(key: "JsonData") as? String else { return "" }
+		return ret
+		
 		var retStr = ""
 		let path = convertPath(path)
 		if !fileExists(atPath: path) {
@@ -86,6 +100,16 @@ struct HandTrackFake {
 		return fileManager.fileExists(atPath: convertPath(path))
 	}
 
+	func setGroupData(key: String, jsonStr: String) {
+		let userDefaults = UserDefaults(suiteName: appGroupName)
+		userDefaults?.setValue(jsonStr, forKey: key)
+	}
 
+	func groupData(key: String) -> String? {
+		let userDefaults = UserDefaults(suiteName: appGroupName)
+		let jsonStr = userDefaults?.object(forKey: key) as? String
+		return jsonStr
+	}
+	
 }
 

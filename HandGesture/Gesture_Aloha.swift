@@ -28,6 +28,10 @@ class Gesture_Aloha: SpatialGestureProcessor {
 				delegate?.gestureBegan(gesture: self, atPoints: [CGPointZero])
                 state = State.waitForRelease
 				
+				let htf = HandTrackFake()
+				var readStr = htf.readFile(atPath: "handtrack.json")
+				print(readStr)
+
 				/*
 				// Hand Tracking Fake
 				let htf = HandTrackFake()
