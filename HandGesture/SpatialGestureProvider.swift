@@ -21,6 +21,8 @@ class SpatialGestureProvider: NSObject {
 	private var handPoseRequest = VNDetectHumanHandPoseRequest()
 	private var gestureProcessors = [SpatialGestureProcessor]()
 	
+	let htFake = HandTrackFake()
+
 	init(baseView: UIView? = nil) {
 		super.init()
 
@@ -45,6 +47,9 @@ class SpatialGestureProvider: NSObject {
 			NSLog("camera session could not run")
 		}
 
+		if enableHandTrackFake {
+			htFake.initAsAdvertiser()
+		}
 	}
 	
 	func terminate() {
@@ -110,15 +115,18 @@ extension SpatialGestureProvider: AVCaptureVideoDataOutputSampleBufferDelegate {
 				}
 				
 				// HandTrackFake
-				if gestureProcessors.count > 0 {
-					let htf = HandTrackFake()
-					var jsonStr = HandTrackJson2D(handTrackData: gestureProcessors[0].handJoints).jsonStr
-					htf.setGroupData(key: htf.handTrackDataKey, jsonStr: jsonStr)
-					htf.writeFile(atPath: "handtrack.json", contents: jsonStr)
-					// jsonファイルを介して VisionKitの座標値を渡す
-//					var readStr = htf.readFile(atPath: "handtrack.json")
-//					print(readStr)
-//					var dt3D: HandTrackJson3D? = HandTrackJson3D(jsonStr: readStr)	// 2D-->3D変換された座標値
+				if enableHandTrackFake {
+					if gestureProcessors.count > 0 {
+						var jsonStr = HandTrackJson2D(handTrackData: gestureProcessors[0].handJoints).jsonStr
+						htFake.sendHandTrackData(jsonStr)
+//						htFake.setGroupData(key: htf.handTrackDataKey, jsonStr: jsonStr)
+//						htFake.writeFile(atPath: "handtrack.json", contents: jsonStr)
+						
+						// jsonファイルを介して VisionKitの座標値を渡す
+	//					var readStr = htFake.readFile(atPath: "handtrack.json")
+	//					print(readStr)
+	//					var dt3D: HandTrackJson3D? = HandTrackJson3D(jsonStr: readStr)	// 2D-->3D変換された座標値
+					}
 				}
 				
 				for processor in gestureProcessors {

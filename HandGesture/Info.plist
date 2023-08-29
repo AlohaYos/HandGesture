@@ -20,8 +20,15 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_HandTrackFake._tcp</string>
+		<string>_HandTrackFake._udp</string>
+	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>This application uses the camera to demonstrate new Vision technology.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>for HandTrackFake</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
