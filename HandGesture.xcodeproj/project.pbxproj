@@ -21,7 +21,6 @@
 		FF4F996B2A7767DF00ACAAE6 /* Gesture_Draw.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F996A2A7767DF00ACAAE6 /* Gesture_Draw.swift */; };
 		FF59AF552A612885003ADC97 /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF59AF532A612749003ADC97 /* CGPoint.swift */; };
 		FF5EB79E2A9AD9640044BF80 /* HandTrackFake.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5EB79D2A9AD9640044BF80 /* HandTrackFake.swift */; };
-		FF5EB7A02A9ADC2C0044BF80 /* HandTrackJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5EB79F2A9ADC2C0044BF80 /* HandTrackJson.swift */; };
 		FF7563B42A63D61E006A8206 /* Gesture_Heart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7563B32A63CF5E006A8206 /* Gesture_Heart.swift */; };
 		FF78C4A42A7792AA003B215A /* Gesture_Cursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF78C4A32A7792AA003B215A /* Gesture_Cursor.swift */; };
 		FFF349FB2A76744300A31C83 /* SpatialGestureProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF349FA2A76744300A31C83 /* SpatialGestureProvider.swift */; };
@@ -51,7 +50,6 @@
 		FF59AF532A612749003ADC97 /* CGPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
 		FF59AF542A612749003ADC97 /* CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
 		FF5EB79D2A9AD9640044BF80 /* HandTrackFake.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandTrackFake.swift; sourceTree = "<group>"; };
-		FF5EB79F2A9ADC2C0044BF80 /* HandTrackJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandTrackJson.swift; sourceTree = "<group>"; };
 		FF7563B32A63CF5E006A8206 /* Gesture_Heart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gesture_Heart.swift; sourceTree = "<group>"; };
 		FF78C4A32A7792AA003B215A /* Gesture_Cursor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gesture_Cursor.swift; sourceTree = "<group>"; };
 		FFF349FA2A76744300A31C83 /* SpatialGestureProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialGestureProvider.swift; sourceTree = "<group>"; };
@@ -136,7 +134,6 @@
 			isa = PBXGroup;
 			children = (
 				FF5EB79D2A9AD9640044BF80 /* HandTrackFake.swift */,
-				FF5EB79F2A9ADC2C0044BF80 /* HandTrackJson.swift */,
 			);
 			path = HandTrackFake;
 			sourceTree = "<group>";
@@ -220,7 +217,6 @@
 				C4EB82EB248AEB7B00CD7D41 /* AppDelegate.swift in Sources */,
 				FF0192582A5F859E0062358D /* DrawLayer.swift in Sources */,
 				C4EB82ED248AEB7B00CD7D41 /* SceneDelegate.swift in Sources */,
-				FF5EB7A02A9ADC2C0044BF80 /* HandTrackJson.swift in Sources */,
 				FF59AF552A612885003ADC97 /* CGPoint.swift in Sources */,
 				FF78C4A42A7792AA003B215A /* Gesture_Cursor.swift in Sources */,
 				C475655D248AEBD900F111B8 /* CameraView.swift in Sources */,
